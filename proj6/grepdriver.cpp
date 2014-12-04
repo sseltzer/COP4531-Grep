@@ -25,16 +25,17 @@ vector<vector<string> > data;
 
 int main(int argc, char* argv[])
 {
+
+	if (argc < 2) {		// no pattern
+		cout<<"Error: expected input 'grep [options] PATTERN [FILE...]'"<<endl;
+	}
+	
 	if (!strcmp("-help", argv[1])){
 		std::cout<< "help arguments";
 		GrepHelp();
 		return 1;
 	}
-	
-	if (argc < 2) {		// no pattern
-		cout<<"Error: expected input 'grep [options] PATTERN [FILE...]'"<<endl;
-	}
-	
+		
 	if (argc == 2 && argv[1][0] != '-') {
 		cout << "reading from standard in is not implimented" << endl;
 		return 1;
