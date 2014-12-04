@@ -15,6 +15,9 @@ bool setInput (int argc, char* argv[]);
 bool getData (int k);
 bool addDirectories (char* directory);
 
+void GrepHelp();
+void CommandFormat();
+
 const char* PATTERN;
 vector<char*> flags;
 vector<char*> fileNames;
@@ -22,6 +25,12 @@ vector<vector<string> > data;
 
 int main(int argc, char* argv[])
 {
+	if (!strcmp("-help", argv[1])){
+		std::cout<< "help arguments";
+		GrepHelp();
+		return 1;
+	}
+	
 	if (argc < 2) {		// no pattern
 		cout<<"Error: expected input 'grep [options] PATTERN [FILE...]'"<<endl;
 	}
@@ -37,7 +46,7 @@ int main(int argc, char* argv[])
 	
 	//currently, it stores all flags in flags, it stores the pattern in PATTERN, it stores the data from all files listed in data, it can recognize a directory and iterate through it, but it can't get the files from it.
 	
-	/*		//this is just for testing
+			//this is just for testing
 	for (int i = 0; i < flags.size(); i ++)
 		cout<<"flag :" << flags[i]<<endl;
 		
@@ -49,7 +58,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < data.size(); i++)
 		for (int j = 0; j < data[i].size(); j++)
 			cout<<"line :"<<data[i][j]<<endl;
-	*/
+	
 	
     return 1;
 }
@@ -150,4 +159,19 @@ bool setInput (int argc, char* argv[]){
 		}
 	}
 	return true;
+}
+
+void GrepHelp()
+{
+    // Implementation according to flags
+    std::cout << "Regexp selection and interpretation:"
+              << "\n -E, --extended-regexp     PATTERN is an extended regular expression "
+              << "\n -F, --fixed-strings       PATTERN is a set of newline-separated strings ";
+
+    std::cout << std::endl;
+}
+void CommandFormat()
+{
+    std::cout << "grep.x [flags] [pattern] [inFile] [outFile]"
+              << std::endl;
 }
