@@ -2,21 +2,19 @@
 #include "xstring.h"
 #include <iostream>
 #include "grep.h"
+#include "nfa.h"
 
 //test
 int main(int argc, char* argv[])
 {
-<<<<<<< Updated upstream
     
     //format of grep command
     //GREP.x [flags] [pattern] [inFile] [outFile]
 
-=======
 	std::cout << "I did a thing! "<< argc << "\n";
     fsu::String str;
     
     
->>>>>>> Stashed changes
     return 1;
 }
 void GrepHelp()
