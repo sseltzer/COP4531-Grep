@@ -20,7 +20,7 @@ public:
     void search     (Vector search);
 private:
     char* flag_;
-    Vector string;
+    Vector string_;
     
 };
 
@@ -36,6 +36,7 @@ bool Grep::setFlag(const char* flag)
 
 void Grep::input (Vector input)
 {
+    
     
 }
 
