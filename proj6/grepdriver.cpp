@@ -1,9 +1,9 @@
 #include <fstream>
 #include <iostream>
 #include "grep.h"
+#include "vector.h"
 
 
-#include <vector>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,10 +12,12 @@
 #include <dirent.h>
 #include <limits.h>
 
+typedef std::string            String;
+
 using namespace std;
 
 bool setInput (int argc, char* argv[]);
-bool getData (int k);
+bool getData (size_t k);
 bool addDirectories (char* directory);
 bool wildCard(char * input, char* file);
 
@@ -24,9 +26,9 @@ void GrepHelp();
 void CommandFormat();
 
 const char* PATTERN;
-vector<char*> flags;
-vector<char*> fileNames;
-vector<vector<string> > data;
+fsu::Vector<String> flags;
+fsu::Vector<String> fileNames;
+fsu::Vector<fsu::Vector<String> > data;
 
 int main(int argc, char* argv[])
 {
@@ -63,25 +65,34 @@ int main(int argc, char* argv[])
 	
 	// needed additions are calls to grep.h to search the files for PATTERN and display the results
 	
+	Grep grep;																	// create Grep object
 	
-    
+    for (size_t i = 0; i < flags.Size(); i++) grep.setFlag(flags[i].c_str());	// set flags
+	
+	if (!grep.search(PATTERN)) return 1;										// set pattern
+	
+	if (!grep.processing(fileNames)) return 1;									// set file names
+	
+	for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results
+	
     return 1;
 }
 
 void dump(){										// this is for testing
-	for (int i = 0; i < flags.size(); i ++)			
+	for (size_t i = 0; i < flags.Size(); i ++)			
 		cout<<"flag ["<<i<<"]:" << flags[i]<<endl;
 		
 	cout <<"pattern :" << PATTERN << endl;
 		
-	for (int i = 0; i < fileNames.size(); i++)
+	for (size_t i = 0; i < fileNames.Size(); i++)
 		cout<<"filename ["<<i<<"]:" << fileNames[i]<<endl;
 	
-	for (int i = 0; i < data.size(); i++)
-		for (int j = 0; j < data[i].size(); j++)
+	for (size_t i = 0; i < data.Size(); i++)
+		for (size_t j = 0; j < data[i].Size(); j++)
 			cout<<"line ["<<j<<"]:"<<data[i][j]<<endl;
 }
 
+/*
 bool addDirectories (char* directory){					// this doesn't work yet and is likely unneeded in keeping in the behaviour of grep on linprog
 	
 	char buf[PATH_MAX + 1]; 
@@ -107,21 +118,24 @@ bool addDirectories (char* directory){					// this doesn't work yet and is likel
 	}
     return 1;
 }
+*/
 
-bool getData(int k) {					// works recursively upward from fileNames[k] and puts their data in data[k]
+bool getData(size_t k) {					// works recursively upward from fileNames[k] and puts their data in data[k]
 	
-	vector<string> file;				// temporary vector to hold the data from the current file
+	fsu::Vector<String> file;				// temporary vector to hold the data from the current file
 	string line;
 	ifstream myfile (fileNames[k]);		
 	
 	while (getline(myfile, line)){
-		file.push_back(line);
+		file.PushBack(line);
 	}
 	
-	data.push_back(file);
+	data.PushBack(file);
 	
-	if (k == fileNames.size() - 1) return true;				// stops the function at the last filename
-	if (k < fileNames.size() - 1) return getData(k + 1);	// calls the function for the next filename
+	myfile.close();
+	
+	if (k == fileNames.Size() - 1) return true;				// stops the function at the last filename
+	if (k < fileNames.Size() - 1) return getData(k + 1);	// calls the function for the next filename
 	
 	return false;
 }
@@ -139,12 +153,12 @@ bool setInput (int argc, char* argv[]){
 		havePattern = true;
 	}
 	
-	for (size_t i = k; i < argc; i++){
+	for (int i = k; i < argc; i++){
 		if (argv[i][0] == '-' && lastFlag == false){			// if argv[i] is a flag and there hasn't been a non-flag then add it to flags
 			if (argv[i][1] != '-')								// this is for a single dash flag
-				flags.push_back(argv[i] + 1);
+				flags.PushBack(argv[i] + 1);
 			else
-				flags.push_back(argv[i] + 2);					// this is for a -- flag
+				flags.PushBack(argv[i] + 2);					// this is for a -- flag
 				
 			if (i == (argc - 1)) {								// this is if a flag is the last entry instead of a pattern
                 CommandFormat();
@@ -170,7 +184,7 @@ bool setInput (int argc, char* argv[]){
 				//addDirectories(argv[i]);						// this probably won't be implemented as it isn't implemented on grep when used on linprog
 			}
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
-				fileNames.push_back(argv[i]);
+				fileNames.PushBack(argv[i]);
 			}
 			else {
                 // if the filename is invalid give an error
