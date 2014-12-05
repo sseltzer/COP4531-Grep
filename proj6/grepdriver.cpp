@@ -1,9 +1,6 @@
-
-#include "xstring.h"
 #include <fstream>
 #include <iostream>
 #include "grep.h"
-#include "nfa.h"
 
 typedef std::string            String;
 typedef fsu::Vector<String>    Vector;
