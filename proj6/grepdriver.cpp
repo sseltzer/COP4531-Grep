@@ -14,6 +14,7 @@ using namespace std;
 bool setInput (int argc, char* argv[]);
 bool getData (int k);
 bool addDirectories (char* directory);
+bool wildCard(char * input, char* file);
 
 void dump();
 void GrepHelp();
@@ -42,6 +43,13 @@ int main(int argc, char* argv[])
 		cout << "reading from standard in is not implimented" << endl;
 		return 1;
 	}
+    
+
+  /*  if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
+    {
+        cout<< argv[2] << " matches";
+        return 1;
+    } */
 	
 	if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
 	
@@ -160,13 +168,43 @@ bool setInput (int argc, char* argv[]){
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
 				fileNames.push_back(argv[i]);
 			}
-			else {												// if the filename is invalid give an error
-				cout << "invalid file" << endl;
+			else {
+                // if the filename is invalid give an error
+				cout << "grep.x: "<< argv[i] << ": No such file or directory" << endl;
 				return false;
 			}
 		}
 	}
 	return true;
+}
+// fucntion is not working properly.
+bool wildCard(char * input, char* file)
+{
+    bool match = false;
+        // If we reach at the end of both strings, we are done
+    if (*input== '\0' && *file == '\0'){
+            return !match;
+    }
+    
+        // Make sure that the characters after '*' are present in second string.
+    if (*input == '*' && *(input+1) != '\0' && *file == '\0'){
+            return match;
+    }
+    
+        // If the first string contains '?', or current characters of both
+        // strings match
+    if (*input == '?' || *input == *file){
+            return wildCard(input+1, file+1);
+    }
+    
+
+    if (*input == '*'){
+        
+        return wildCard(input+1, file) || wildCard(input, file+1);
+    }
+    
+    return match;
+
 }
 
 void GrepHelp()
