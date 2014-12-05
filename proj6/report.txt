@@ -1,0 +1,158 @@
+
+December 3, 2014
+Brain storming and implemenation of basic ideas about the project
+
+December 4, 2014
+Testing grepdriver.cpp
+
+First Compilation of the grepdriver.cpp
+maturana@linprog3.cs.fsu.edu:~>cd projtest
+maturana@linprog3.cs.fsu.edu:~/projtest>g++47 -std=c++11 -Wall -Westra grepdriver.cpp
+g++47: error: unrecognized command line option ‘-Westra’
+maturana@linprog3.cs.fsu.edu:~/projtest>g++47 -std=c++11 -Wall -Wextra grepdriver.cpp
+grepdriver.cpp: In function ‘int main(int, char**)’:
+grepdriver.cpp:53:33: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:58:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:61:32: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:62:36: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp: In function ‘bool addDirectories(char*)’:
+grepdriver.cpp:103:7: warning: unused variable ‘buf’ [-Wunused-variable]
+grepdriver.cpp:124:1: warning: no return statement in function returning non-void [-Wreturn-type]
+grepdriver.cpp: In function ‘bool getData(int)’:
+grepdriver.cpp:138:30: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:139:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp: In function ‘bool setInput(int, char**)’:
+grepdriver.cpp:157:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:164:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:177:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+maturana@linprog3.cs.fsu.edu:~/projtest>pico grepdriver.cpp
+maturana@linprog3.cs.fsu.edu:~/projtest>g++47 -std=c++11 -Wall -Wextra grepdriver.cpp
+grepdriver.cpp: In function ‘int main(int, char**)’:
+grepdriver.cpp:70:3: error: expected primary-expression before ‘/’ token
+grepdriver.cpp:73:5: error: expected primary-expression before ‘if’
+grepdriver.cpp:73:5: error: expected ‘;’ before ‘if’
+grepdriver.cpp:213:1: error: expected ‘}’ at end of input
+grepdriver.cpp: At global scope:
+grepdriver.cpp:26:5: warning: unused parameter ‘argc’ [-Wunused-parameter]
+grepdriver.cpp:26:5: warning: unused parameter ‘argv’ [-Wunused-parameter]
+maturana@linprog3.cs.fsu.edu:~/projtest>rm a.out
+maturana@linprog3.cs.fsu.edu:~/projtest>g++47 -std=c++11 -Wall -Wextra grepdriver.cpp
+grepdriver.cpp: In function ‘int main(int, char**)’:
+grepdriver.cpp:70:3: error: expected primary-expression before ‘/’ token
+grepdriver.cpp:73:5: error: expected primary-expression before ‘if’
+grepdriver.cpp:73:5: error: expected ‘;’ before ‘if’
+grepdriver.cpp:213:1: error: expected ‘}’ at end of input
+grepdriver.cpp: At global scope:
+grepdriver.cpp:26:5: warning: unused parameter ‘argc’ [-Wunused-parameter]
+grepdriver.cpp:26:5: warning: unused parameter ‘argv’ [-Wunused-parameter]
+maturana@linprog3.cs.fsu.edu:~/projtest>ls -l
+total 12
+-rw------- 1 maturana CS-Majors   50 Dec  4 12:41 alfa.txt
+-rw-r--r-- 1 maturana CS-Majors 5041 Dec  4 13:09 grepdriver.cpp
+maturana@linprog3.cs.fsu.edu:~/projtest>pico grepdriver.cpp
+maturana@linprog3.cs.fsu.edu:~/projtest>g++47 -std=c++11 -Wall -Wextra grepdriver.cpp
+grepdriver.cpp: In function ‘bool addDirectories(char*)’:
+grepdriver.cpp:103:7: warning: unused variable ‘buf’ [-Wunused-variable]
+grepdriver.cpp:124:1: warning: no return statement in function returning non-void [-Wreturn-type]
+grepdriver.cpp: In function ‘bool getData(int)’:
+grepdriver.cpp:138:30: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:139:29: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp: In function ‘bool setInput(int, char**)’:
+grepdriver.cpp:157:25: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:164:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+grepdriver.cpp:177:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+maturana@linprog3.cs.fsu.edu:~/projtest>a.out
+Error: expected input grep.x [flags] [pattern] [inFile] [outFile]Type -help for help
+maturana@linprog3.cs.fsu.edu:~/projtest>
+
++ Test after compilation
+maturana@linprog3.cs.fsu.edu:~/projtest>ls -l
+total 76
+-rw------- 1 maturana CS-Majors   794 Dec  4 14:03 alfa.txt
+-rwx------ 1 maturana CS-Majors 57354 Dec  4 14:03 a.out
+-rw-r--r-- 1 maturana CS-Majors  5033 Dec  4 14:03 grepdriver.cpp
+-rw-r--r-- 1 maturana CS-Majors     0 Dec  4 14:03 report.txt
+maturana@linprog3.cs.fsu.edu:~/projtest>a.out alfa.txt
+reading from standard in is not implimented
+maturana@linprog3.cs.fsu.edu:~/projtest>a.out -i test alfa.txt
+flag :i
+pattern :test
+filename :alfa.txt
+line :this is a test for my
+line :project 
+line :cop4531 TEST 1 2 3
+line :
+line :
+line :You cannot install this software on this disk. (null)
+line :If this error occurs, simply click the Go Back button once to return to the previous 
+line :screen. Then click Continue to advance to the destination disk selection again, 
+line :and you should be able to choose the destination disk correctly. We have reported this 
+line :bug to Apple and it is investigating this problem.
+line :
+line :The Mac OS X MySQL DMG package installs itself into /usr/local/mysql-VERSION and 
+line :also installs a symbolic link, /usr/local/mysql, that points to the new location. 
+line :If a directory named /usr/local/mysql exists, it is renamed to /usr/local/mysql.bak 
+line :first. Additionally, the installer creates the grant tables in the mysql
+line :
+line :
+line :
+line :Apple, orange,
+line :tamarindo
+line :
+line :End of file
+I did a thing! -i test
+maturana@linprog3.cs.fsu.edu:~/projtest>
+
++ Program seems to display a segmentation fault when only a.out is typed and no other objects in the same line
+maturana@linprog3.cs.fsu.edu:~/projtest>a.out
+Segmentation fault
+maturana@linprog3.cs.fsu.edu:~/projtest>
+
++ Wrong message comes out when the --help is typed after a.out(grep.x)
+maturana@linprog3.cs.fsu.edu:~/projtest>a.out --help
+Error: expected input 'grep [options] PATTERN [FILE...]'
+maturana@linprog3.cs.fsu.edu:~/projtest>
+
++ Program displays the correct data
+maturana@linprog3.cs.fsu.edu:~/projtest>a.out -help
+help argumentsRegexp selection and interpretation:
+ -E, --extended-regexp     PATTERN is an extended regular expression 
+ -F, --fixed-strings       PATTERN is a set of newline-separated strings 
+maturana@linprog3.cs.fsu.edu:~/projtest>
+
++ lets compare it to the grep (unix)
+maturana@linprog3.cs.fsu.edu:~/projtest>grep -help
+
+Suspended
+maturana@linprog3.cs.fsu.edu:~/projtest>grep --help
+Usage: grep [OPTION]... PATTERN [FILE] ...
+Search for PATTERN in each FILE or standard input.
+Example: grep -i 'hello world' menu.h main.c
+
+Regexp selection and interpretation:
+  -E, --extended-regexp     PATTERN is an extended regular expression
+  -F, --fixed-strings       PATTERN is a set of newline-separated strings
+  -G, --basic-regexp        PATTERN is a basic regular expression
+  -P, --perl-regexp         PATTERN is a Perl regular expression
+  -e, --regexp=PATTERN      use PATTERN as a regular expression
+  -f, --file=FILE           obtain PATTERN from FILE
+  -i, --ignore-case         ignore case distinctions
+  -w, --word-regexp         force PATTERN to match only whole words
+  -x, --line-regexp         force PATTERN to match only whole lines
+  -z, --null-data           a data line ends in 0 byte, not newline
+
++ -help must be change to --help
+
++ After moving 
+ 	if (argc == 1) {
+				
+	CommandFormat();
+				
+	return 1;
+	}
+  to the top the Segmentation default stop
+
++ However segmentation fault appears after typign
+	maturana@linprog3.cs.fsu.edu:~/projtest>a.out -i test alfa.txt
+	Segmentation fault
+	maturana@linprog3.cs.fsu.edu:~/projtest>
