@@ -69,6 +69,7 @@ bool Grep::processing (Vector files)
             }
             line.clear();
         }
+        lineNumber = 0;
     }
     return true;
 }
