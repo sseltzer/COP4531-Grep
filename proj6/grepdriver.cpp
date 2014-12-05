@@ -7,7 +7,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <limits.h> 
+#include <limits.h>
 
 using namespace std;
 
@@ -15,6 +15,7 @@ bool setInput (int argc, char* argv[]);
 bool getData (int k);
 bool addDirectories (char* directory);
 
+void dump();
 void GrepHelp();
 void CommandFormat();
 
@@ -44,26 +45,29 @@ int main(int argc, char* argv[])
 	
 	if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
 	
-	if (getData(0) == false) return 1; 			// add lines from fileNames to data
+	if (getData(0) == false) return 1; 				// add lines from fileNames to data
 	
-	//currently, it stores all flags in flags, it stores the pattern in PATTERN, it stores the data from all files listed in data, it can recognize a directory and iterate through it, but it can't get the files from it.
+	dump();	//just for testing can safely be removed
 	
-	//this is just for testing
+	// needed additions are calls to grep.h to search the files for PATTERN and display the results
 	
-	for (int i = 0; i < flags.size(); i ++)
-		cout<<"flag :" << flags[i]<<endl;
+	
+    
+    return 1;
+}
+
+void dump(){										// this is for testing
+	for (int i = 0; i < flags.size(); i ++)			
+		cout<<"flag ["<<i<<"]:" << flags[i]<<endl;
 		
 	cout <<"pattern :" << PATTERN << endl;
 		
 	for (int i = 0; i < fileNames.size(); i++)
-		cout<<"filename :" << fileNames[i]<<endl;
+		cout<<"filename ["<<i<<"]:" << fileNames[i]<<endl;
 	
 	for (int i = 0; i < data.size(); i++)
 		for (int j = 0; j < data[i].size(); j++)
-			cout<<"line :"<<data[i][j]<<endl;
-	
-    
-    return 1;
+			cout<<"line ["<<j<<"]:"<<data[i][j]<<endl;
 }
 
 bool addDirectories (char* directory){					// this doesn't work yet and is likely unneeded in keeping in the behaviour of grep on linprog
