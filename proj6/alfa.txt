@@ -1,0 +1,22 @@
+this is a test for my
+project 
+cop4531 TEST 1 2 3
+
+
+You cannot install this software on this disk. (null)
+If this error occurs, simply click the Go Back button once to return to the previous 
+screen. Then click Continue to advance to the destination disk selection again, 
+and you should be able to choose the destination disk correctly. We have reported this 
+bug to Apple and it is investigating this problem.
+
+The Mac OS X MySQL DMG package installs itself into /usr/local/mysql-VERSION and 
+also installs a symbolic link, /usr/local/mysql, that points to the new location. 
+If a directory named /usr/local/mysql exists, it is renamed to /usr/local/mysql.bak 
+first. Additionally, the installer creates the grant tables in the mysql
+
+
+
+Apple, orange,
+tamarindo
+
+End of file

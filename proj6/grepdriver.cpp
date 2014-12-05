@@ -27,7 +27,8 @@ int main(int argc, char* argv[])
 {
 
 	if (argc < 2) {		// no pattern
-		cout<<"Error: expected input 'grep [options] PATTERN [FILE...]'"<<endl;
+        CommandFormat();
+        return 1;
 	}
 	
 	if (!strcmp("-help", argv[1])){
@@ -61,6 +62,39 @@ int main(int argc, char* argv[])
 			cout<<"line :"<<data[i][j]<<endl;
 	
 	
+
+    
+    //format of grep command
+    //GREP.x [flags] [pattern] [inFile] [outFile]
+  /*
+    fstring help = "-help";
+    // Error
+    if (argc == 3)
+    {
+        std::ifstream file(argv[2]);
+        if (file.fail())
+        {
+            std::cout << argv[2] << " File does not exist ";
+            std::cout << std::endl;
+            return 1;
+        }
+    }
+    if (argc == 1){
+        CommandFormat();
+        return 1;
+    }
+    if (help.compare(argv[1]) == 0)
+    {
+        std::cout<< "Help arguments";
+        GrepHelp();
+        return 1;
+    }
+    */
+
+	std::cout << "I did a thing! "<< argv[1] << " "<< argv [2] << "\n";
+   // fstring str;
+    
+    
     return 1;
 }
 
@@ -87,6 +121,7 @@ bool addDirectories (char* directory){			// this doesn't work yet
 		}
 		closedir (dir);
 	}
+    return 1;
 }
 
 bool getData(int k) {
@@ -128,13 +163,13 @@ bool setInput (int argc, char* argv[]){
 				flags.push_back(argv[i] + 2);
 				
 			if (i == (argc - 1)) {
-				cout<<"Error: expected input 'grep [options] PATTERN [FILE...]'"<<endl;
+                CommandFormat();
 				return false;
 				}
 			if (argv[i + 1][0] != '-') lastFlag = true;
 		}
 		else if (lastFlag == true && argv[i][0] == '-'){
-			cout<<"Error: expected input 'grep [options] PATTERN [FILE...]'"<<endl;
+            CommandFormat();
 			return false;						//either a flag without - or a flag after a file
 		}
 		else if (lastFlag == true && havePattern == false){
@@ -173,6 +208,7 @@ void GrepHelp()
 }
 void CommandFormat()
 {
-    std::cout << "grep.x [flags] [pattern] [inFile] [outFile]"
+    std::cout << "Error: expected input grep.x [flags] [pattern] [inFile] [outFile]"
+              << "\nType -help for help"
               << std::endl;
 }
