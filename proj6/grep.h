@@ -53,9 +53,9 @@ bool Grep::processing (Vector files)
             return 0;
         }
         
-        if (search_ == NULL) {
+        if (search_ == NULL)
             std::cout << "Search parameter not set\n";
-        }
+        
         Nfa nfa(search_);
         while (!inStream.eof())
         {
@@ -67,10 +67,8 @@ bool Grep::processing (Vector files)
                 //if flag set add line number to front of line
                 results_.PushBack(line);
             }
-           
             line.clear();
         }
-        
     }
     return true;
 }
@@ -82,12 +80,10 @@ Vector Grep::results()
 
 bool Grep::search(const char* search)
 {
-    if (sizeof(*search) == 0) { std::cout << "Search is zero\n"; return false;}
-    if (search == NULL)       { std::cout << "Search is zero\n"; return false;}
-    if (*search == '\0')      { std::cout << "'\\0' string\n  "; return false;}
+    if (sizeof(*search) == 0) { std::cout << "Search is zero length\n "; return false;}
+    if (search == NULL)       { std::cout << "Search pointer is NULL\n"; return false;}
+    if (*search == '\0')      { std::cout << "'\\0' string\n          "; return false;}
     
-    std::cout << "search = " << search << '\n';
-    if (search == NULL) return false;
     search_ = search;
     return true;
 }
