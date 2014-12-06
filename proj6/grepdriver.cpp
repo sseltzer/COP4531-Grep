@@ -21,15 +21,14 @@ bool getData (size_t k);
 bool addDirectories (char* directory);
 bool wildCard(char * input, char* file);
 
-//string list_dir (const char *path);
+
 fsu::Vector<String> list_dir (const char *path);
-void DirOrFile(char* path);
+bool DirOrFile_(char* path);
 
 
 void dump();
 void GrepHelp();
 void CommandFormat();
-bool Dirrectories ( char* directory); // Delete it may not be necesary
 
 const char* PATTERN;
 fsu::Vector<String> flags;
@@ -45,7 +44,7 @@ int main(int argc, char* argv[])
 	}
 	
 	if (!strcmp("-help", argv[1])){
-		std::cout<< "help arguments";
+		std::cout<< "Help arguments\n";
 		GrepHelp();
 		return 1;
 	}
@@ -56,6 +55,7 @@ int main(int argc, char* argv[])
 	}
     //Dirrectories (argv[2]);
     //DirOrFile(argv[2]);
+    //DirOrFile_(argv[2]);
 
     /*if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
     {
@@ -129,26 +129,6 @@ bool addDirectories (char* directory){					// this doesn't work yet and is likel
 }
 */
 
-bool Dirrectories ( char* directory)
-{
-    DIR *dir;
-    struct dirent *ent;
-    if ((dir = opendir ("c:\\src\\")) != NULL) {
-        /* print all the files and directories within directory */
-        while ((ent = readdir (dir)) != NULL) {
-            printf ("%s\n", ent->d_name);
-            
-        }
-        closedir (dir);
-        return 1;
-    } else
-    {
-        //could not open directory
-        perror ("");
-        return 0;
-    }
-}
-
 bool getData(size_t k) {					// works recursively upward from fileNames[k] and puts their data in data[k]
 	
 	fsu::Vector<String> file;				// temporary vector to hold the data from the current file
@@ -211,11 +191,11 @@ bool setInput (int argc, char* argv[]){
 			stat(argv[i], &st);
 			if (st.st_mode & S_IFDIR){							// if the filename is for a directory search through the directory and add all files in it to fileNames
                 fsu::Vector<String> tmp(list_dir(argv[i]));
-                for(fsu::Vector<String>::Iterator i = tmp.Begin(); i != tmp.End(); ++i)
+                for(fsu::Vector<String>::Iterator j = tmp.Begin(); j != tmp.End(); ++j)
                 {
-                    fileNames.PushBack(*i);
+                    fileNames.PushBack(argv[i]+'/'+*j);
                     // this is just for testing purposes
-                    cout<< *i << endl;
+                    cout<< (argv[i] + *j) << endl;
                 }
 			}
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
@@ -278,32 +258,36 @@ void CommandFormat()
 // List all the files in the directory
 fsu::Vector<String> list_dir (const char *path)
 {
-    
+    size_t size = 1000;
     struct dirent *entry;
     fsu::Vector<String> files;
     DIR *dir;
     dir = opendir (path);
     
     while ((entry = readdir (dir)) != NULL) {
+        //char *buffer = path + entry->d_name;
+        if (entry->d_name != ".." && entry->d_name != "." && entry->d_name[0] == ".")
+
         files.PushBack(entry->d_name);
+
     }
 
     return files;
 }
 //
-void DirOrFile(char* path)
+bool DirOrFile_(char *path)
 {
     struct stat s;
     if( stat(path,&s) == 0 )
     {
         if( s.st_mode & S_IFDIR )
         {
-            cout<< " This is the list of directories: "<<endl;
-            list_dir(path);
+            return 1;
         }
         else if( s.st_mode & S_IFREG )
         {
-            cout << " It is a file " << path << endl;
+            return 0;
         }
     }
+    return 0;
 }
