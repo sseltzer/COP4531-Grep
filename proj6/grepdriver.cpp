@@ -19,6 +19,14 @@ bool getData (int k);
 bool addDirectories (char* directory);
 bool wildCard(char * input, char* file);
 
+bool wildCard( std::string input, std::string file);
+
+
+fsu::Vector<std::string> list_dir (const char *path);
+bool DirOrFile_(char* path);
+std::string newPath(char *path);
+
+
 void dump();
 void GrepHelp();
 void CommandFormat();
@@ -57,7 +65,8 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-    
+ //   cout << "here" << endl;
+  //  cout << newPath(argv[3]) << endl;
 
 */
   /*  if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
@@ -70,14 +79,46 @@ int main(int argc, char* argv[])
 	if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
 	
 	if (getData(0) == false) return 1; 				// add lines from fileNames to data
+
+  /*  if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
+	
+	//if (getData(fileNames.Size()-1) == false) return 1;  // This is just for testing purposes
+    
+    if (getData(0) == false) return 1; 				// add lines from fileNames to
+    */
+
 	
 	dump();	//just for testing can safely be removed
 	
 	// needed additions are calls to grep.h to search the files for PATTERN and display the results
 	
+<<<<<<< Updated upstream
 	
 */
     
+=======
+	Grep grep;																	// create Grep object
+	
+    for (size_t i = 0; i < flags.Size(); i++) grep.setFlag(flags[i].c_str());	// set flags
+	
+	if (!grep.search(PATTERN)) return 1;										// set pattern
+	
+//	if (!grep.processing(fileNames)) return 1;									// set file names
+	
+
+	if (!toFile)
+		for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results
+	else {
+		ofstream myfile;
+		myfile.open(file);
+		for (size_t i = 0; i < grep.results().Size(); i++) myfile<<grep.results()[i];
+		myfile.close();
+	}
+	
+
+	for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results */
+	dump();
+>>>>>>> Stashed changes
     return 1;
 }
 
@@ -180,8 +221,12 @@ bool setInput (int argc, char* argv[]){
 		else if (lastFlag == true && havePattern == true){
 			stat(argv[i], &st);
 			if (st.st_mode & S_IFDIR){							// if the filename is for a directory search through the directory and add all files in it to fileNames
-				//addDirectories(argv[i]);						// this probably won't be implemented as it isn't implemented on grep when used on linprog
-			}
+                fsu::Vector<std::string> tmp(list_dir(argv[i]));
+                for(fsu::Vector<std::string>::Iterator j = tmp.Begin(); j != tmp.End(); ++j)
+                {
+                        fileNames.PushBack(*j);
+                }
+            }
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
 				fileNames.push_back(argv[i]);
 			}
@@ -239,3 +284,80 @@ void CommandFormat()
               << "\nType -help for help"
               << std::endl;
 }
+<<<<<<< Updated upstream
+=======
+
+// List all the files in the directory
+fsu::Vector<std::string> list_dir (const char *path)
+{
+    struct dirent *entry;
+    fsu::Vector<std::string> files;
+    DIR *dir;
+    dir = opendir (path);
+    
+    
+    while ((entry = readdir (dir)) != NULL) {
+        switch (entry->d_type)
+        {
+            case DT_REG:
+            {
+                std::string location(path);
+                location = location + "/" + entry->d_name;
+                files.PushBack(location);
+            }
+                break;
+            case DT_DIR:
+            {
+                continue;
+            }
+                break;
+            default:
+            {
+                cout<< "Error 1: Empty Folder"<<endl;
+            }
+                break;
+        }
+
+    }
+    return files;
+}
+
+bool DirOrFile_(char *path)
+{
+    struct stat s;
+    if( stat(path,&s) == 0 )
+    {
+        if( s.st_mode & S_IFDIR )
+        {
+            return 1;
+        }
+        else if( s.st_mode & S_IFREG )
+        {
+            return 0;
+        }
+    }
+    return 0;
+}
+std::string newPath(char *path)
+{
+    std::string sPath;
+    size_t file_count = 0;
+    for (size_t i = strlen(path)-1; i >= 0; --i)
+    {
+        if (path[i] != '/')
+        {
+            ++file_count;
+        }
+        else
+        {
+            break;
+        }
+    }
+     char * nPath = new char[(strlen(path) - file_count)+1];
+    for (size_t i = 0; i > (strlen(path)-file_count)+1; ++i){
+        sPath += file_count;
+    }
+    
+    return sPath;
+}
+>>>>>>> Stashed changes

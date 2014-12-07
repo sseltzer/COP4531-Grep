@@ -185,3 +185,135 @@ filename [4]:myTest.txt
 filename [5]:Project
 Load Failed
 Program ended with exit code: 1
+
++ December 6, 2014
+
+The grepdriver is able to distinguish between a file and directly, but it will only display the files and not directories. Moreover, all the files can be red
+
+pattern :Ave
+filename [0]:/Users/gmaturan/Desktop/cpp/COP4531/.DS_Store
+filename [1]:/Users/gmaturan/Desktop/cpp/COP4531/Avengers.txt
+filename [2]:/Users/gmaturan/Desktop/cpp/COP4531/datatest.dat
+filename [3]:/Users/gmaturan/Desktop/cpp/COP4531/first.ex
+filename [4]:/Users/gmaturan/Desktop/cpp/COP4531/line.dat
+filename [5]:/Users/gmaturan/Desktop/cpp/COP4531/myTest.txt
+line [0]:   Bud1           	                                                           e c tbwspbl                                                                                                                                                                                                                                                                                                                                                                                                                                           P r o j e c tbwspblob   \371bplist00\331	
+line [1]:
+line [2]:
+line [3]:
+line [4]:]ShowStatusBar[ShowSidebar[ShowPathbar[ShowToolbar[ShowTabView_ContainerShowSidebar\WindowBounds\SidebarWidth_PreviewPaneVisibility			_{{113, 185}, {770, 449}}\300)5AMYp}\212\242\243\244\245\246\247\250\303\305                            \306                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @      \200                                        @      \200                                          @      \200                                          @                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   E  	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       DSDB                                 `          \200                                         @      \200                                          @      \200                                          @                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+line [0]:
+line [1]:Line 1 For all the tidbits served up (and dug up by fans) in that first trailer for next 
+line [2]:Line 2 summer’s Avengers: Age of Ultron (below), there was one major character who even
+line [3]:Line 3 now remains a mystery: the Vision, the turncoat synthezoid played by Paul Bettany 
+line [4]:Line 4 (who previously lent his voice to Tony Stark’s digital valet J.A.R.V.I.S.)
+line [5]:
+line [6]:Line 5 We may now have our first look at him. An Instagram photo that surfaced yesterday 
+line [7]:Line 6 (from an account that has since been made private) shows what appears to be some 
+line [8]:Line 7 rough art from Joss Whedon’s Avengers sequel, featuring a half-dozen our heroes,
+line [9]:Line 8 and a character who quite possibly could be Vision smack dab in the middle of
+line [10]:Line 9 them. Empire Online reported that the Instagram user, Israel06, spotted the
+line [11]:Line 10 image in a banner at an international Disney event — which, if true, certainly
+line [12]:Line 11 lends it some legitimacy. 
+line [0]:line 1: This is a test
+line [1]:line 2: 
+line [2]:line 3: cop4531 
+line [3]:line 4: word line
+line [4]:line 6: testing this application
+line [5]:line 7: The project is due tomorrow December 7, 2014
+line [6]:line 8: 
+line [7]:line 9: futurama
+line [0]:line 1: This is a test
+line [1]:line 2: 
+line [2]:line 3: cop4531 
+line [3]:line 4: word line
+line [4]:line 6: testing this application
+line [5]:line 7: The project is due tomorrow December 7, 2014
+line [6]:line 8: 
+line [7]:line 9: futurama
+line [0]:line 1: This is a test
+line [1]:line 2: 
+line [2]:line 3: cop4531 
+line [3]:line 4: word line
+line [4]:line 6: testing this application
+line [5]:line 7: The project is due tomorrow December 7, 2014
+line [6]:line 8: 
+line [7]:line 9: futurama
+line [0]:Line 1: Six years after we collectively decided to forget “Terminator: Salvation” ever Line 2: happened,
+line [1]:Line 3: Arnold Schwarzenegger is back to resuscitate the franchise.
+line [2]:
+line [3]:
+line [4]:Line 4: In the first full trailer for Paramount Pictures and Skydance Productions 
+line [5]:Line 5: “Terminator: 
+line [6]:Line 6: Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+line [7]:Line 7: split, and we’re in a new leg/reality now. One where Connor was raised by Schwarzengger’s 
+line [8]:Line 8: T-800 and became a stone cold badass years before her alternate personality in the Prime 
+line [9]:Line 9: timeline.
+line [10]:Line 10:
+line [11]:Line 11:
+line [12]:Line 12: Apple, Orange, Banana
+line [13]:Line 13: December 12, 2014
+Program ended with exit code: 1
+
++ Test 2
+When the wrong format is entered grepdriver.cpp displays:
+
+for example
+
+grep.x Ave
+
+reading from standard in is not implemented
+Program ended with exit code: 1
+
+instead of 
+
+Error: expected input grep.x [flags] [pattern] [inFile] [outFile]
+Type -help for help
+
+The above issue was fixed.
+Function CommandFormat() was not being called
+
++ Test 3
+the wildCard function is being implemented
+This are the result of it:
+
+Text contains the phrase .txt
+Text contains the phrase .txt
+pattern :ave
+filename [0]:/Users/gmaturan/Desktop/cpp/COP4531/Avengers.txt
+filename [1]:/Users/gmaturan/Desktop/cpp/COP4531/myTest.txt
+line [0]:
+line [1]:Line 1 For all the tidbits served up (and dug up by fans) in that first trailer for next 
+line [2]:Line 2 summer’s Avengers: Age of Ultron (below), there was one major character who even
+line [3]:Line 3 now remains a mystery: the Vision, the turncoat synthezoid played by Paul Bettany 
+line [4]:Line 4 (who previously lent his voice to Tony Stark’s digital valet J.A.R.V.I.S.)
+line [5]:
+line [6]:Line 5 We may now have our first look at him. An Instagram photo that surfaced yesterday 
+line [7]:Line 6 (from an account that has since been made private) shows what appears to be some 
+line [8]:Line 7 rough art from Joss Whedon’s Avengers sequel, featuring a half-dozen our heroes,
+line [9]:Line 8 and a character who quite possibly could be Vision smack dab in the middle of
+line [10]:Line 9 them. Empire Online reported that the Instagram user, Israel06, spotted the
+line [11]:Line 10 image in a banner at an international Disney event — which, if true, certainly
+line [12]:Line 11 lends it some legitimacy. 
+line [0]:Line 1: Six years after we collectively decided to forget “Terminator: Salvation” ever Line 2: happened,
+line [1]:Line 3: Arnold Schwarzenegger is back to resuscitate the franchise.
+line [2]:
+line [3]:
+line [4]:Line 4: In the first full trailer for Paramount Pictures and Skydance Productions 
+line [5]:Line 5: “Terminator: 
+line [6]:Line 6: Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+line [7]:Line 7: split, and we’re in a new leg/reality now. One where Connor was raised by Schwarzengger’s 
+line [8]:Line 8: T-800 and became a stone cold badass years before her alternate personality in the Prime 
+line [9]:Line 9: timeline.
+line [10]:Line 10:
+line [11]:Line 11:
+line [12]:Line 12: Apple, Orange, Banana
+line [13]:Line 13: December 12, 2014
+Program ended with exit code: 1
+
++ Test 4 
+
+The wildCard() function is not working properly
+
+** Vector<T>::operator[] error: vector index out of range!
+** Vector<T>::operator[] error: vector index out of range!
