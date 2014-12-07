@@ -156,3 +156,32 @@ Regexp selection and interpretation:
 	maturana@linprog3.cs.fsu.edu:~/projtest>a.out -i test alfa.txt
 	Segmentation fault
 	maturana@linprog3.cs.fsu.edu:~/projtest>
+
++ December 5, 2014
+
+The driver is able to distinguish between a file and a directory now.
+The grepdriver can list all the files in a directory now.
+Next step is to try create the wildcard flag.
+
+files in the direcotry .
+files in the direcotry ..
+files in the direcotry .DS_Store
+files in the direcotry Avengers.txt
+files in the direcotry myTest.txt
+files in the direcotry Project
+The 
+.
+..
+.DS_Store
+Avengers.txt
+myTest.txt
+Project
+pattern :Avengers
+filename [0]:.
+filename [1]:..
+filename [2]:.DS_Store
+filename [3]:Avengers.txt
+filename [4]:myTest.txt
+filename [5]:Project
+Load Failed
+Program ended with exit code: 1
