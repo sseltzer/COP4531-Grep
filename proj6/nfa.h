@@ -4,9 +4,9 @@
 #include <xstring.h>
 
 typedef uint32_t Vertex;
-typedef fsu::String String;
 typedef fsu::Vector<char> Vector;
 typedef fsu::Vector<size_t> Stack;
+typedef fsu::Vector<Vertex> State;
 typedef fsu::ALDGraph<Vertex> Graph;
 
 class NFA
@@ -17,7 +17,7 @@ class NFA
 		bool Matches				(const char* line);
 
 	private:
-		void AdvanceToNonControl(Vertex state, fsu::Vector<Vertex> &newStates);
+		void AdvanceToNonControl(Vertex state, State &newStates);
 		bool IsValidCharacter(const char* cur, char pattern);
 		Vector v_;
 		Graph g_;
@@ -67,8 +67,8 @@ void NFA::PatternToNFA(const char* pattern) {
 }
 
 bool NFA::Matches(const char* line) {
-	fsu::Vector<Vertex> states;
-	fsu::Vector<Vertex> newStates;
+	State states;
+	State newStates;
 	NFA::AdvanceToNonControl(0, states);
 	for(const char* c = line; *c; ++c) {
 		for (size_t s = 0; s < states.Size(); ++s) {
@@ -97,7 +97,7 @@ bool NFA::IsValidCharacter(const char* cur, char pattern) {
 	return false;
 }
 
-void NFA::AdvanceToNonControl(Vertex state, fsu::Vector<Vertex> &newStates) {
+void NFA::AdvanceToNonControl(Vertex state, State &newStates) {
 	if (state == v_.Size()) return;
 	Graph::AdjIterator i = g_.Begin(state);
 	for (; i != g_.End(state); ++i) {
