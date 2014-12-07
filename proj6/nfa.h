@@ -11,7 +11,6 @@
 #include <iostream>
 #include <vector.h>
 #include <graph.h>
-#include <xstring.h>
 
 namespace Grep {
 	class NFA
@@ -81,6 +80,7 @@ namespace Grep {
 		State states;
 		State newStates;
 		NFA::AdvanceToNonControl(0, states);
+		bool checkLast = false;
 		for(const char* c = line; *c; ++c) {
 			for (size_t s = 0; s < states.Size(); ++s) {
 				if (states[s] == v_.Size()) return true;
@@ -93,7 +93,10 @@ namespace Grep {
 			for (size_t s = 0; s < newStates.Size(); ++s) states.PushBack(newStates[s]);
 			newStates.Clear();
 			NFA::AdvanceToNonControl(0, states);
-			if (*(c + 1) == '\0') c--;
+			if (!checkLast && *(c + 1) == '\0') {
+				c--;
+				checkLast = true;
+			}
 		}
 		return false;
 	}

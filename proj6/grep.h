@@ -27,13 +27,14 @@
 
 #include <vector.h>
 #include <string>
+#include <cstring>
 #include <fstream>
 #include <nfa.h>
 
 #define NUM_OF_FLAGS 10;
 
 
-namespace grep
+namespace Grep
 {
     class Grep
     {
@@ -42,10 +43,10 @@ namespace grep
         typedef fsu::Vector<String>    Vector;
 
                Grep       ();
-        bool   setFlag    (const char* flag);
-        bool   processing (const Vector files);
-        Vector results    ();
-        bool   search     (char* search);
+        bool   SetFlag    (const char* flag);
+        bool   Processing (const Vector files);
+        Vector Results    ();
+        bool   Search     (char* search);
     private:
         bool   flagSet_[10];
         Vector results_;
@@ -60,16 +61,24 @@ namespace grep
             flagSet_[ctr] = false;
     }
 
-    bool Grep::setFlag(const char* flagSet)
+    bool Grep::SetFlag(const char* flagSet)
     {
-        flagSet_[0] = true;//-i
-        flagSet_[1] = true;//-l
-        flagSet_[2] = true;//-n
-        //std::cout << "Set " << flagSet << " flag\n";
-            return true;
+        ++flagSet;
+        switch(*flagSet) {
+            case 'i':
+                flagSet_[0] = true;
+                return true;
+            case 'l':
+                flagSet_[1] = true;
+                return true;
+            case 'n':
+                flagSet_[2] = true;
+                return true;
+        }
+        return false;
     }
 
-    bool Grep::processing (Vector files)
+    bool Grep::Processing (Vector files)
     {
         
         std::ifstream inStream;
@@ -93,7 +102,7 @@ namespace grep
                 return false;
             }
             
-            Grep::NFA nfa(search_);
+            NFA nfa(search_);
             if (flagSet_[2] == true)
             {   //add line with file name
                 results_.PushBack(files[counter]);
@@ -119,17 +128,18 @@ namespace grep
                 }
                 line.clear();
             }
+            inStream.close();
             lineNumber = 0;
         }
         return true;
     }
         
-    Grep::Vector Grep::results()
+    Grep::Vector Grep::Results()
     {
         return results_;
     }
 
-    bool Grep::search(char* search)
+    bool Grep::Search(char* search)
     {
         size_t ind = 0;
         if (sizeof(*search) == 0) { std::cout << "Search is zero length\n "; return false;}
@@ -138,7 +148,7 @@ namespace grep
         
         if (flagSet_[0] == true)
         {
-            while (strlen(search) > ind)
+            while (std::strlen(search) > ind)
             {
                 search[ind] = std::tolower(search[ind]);
                 ++ind;
