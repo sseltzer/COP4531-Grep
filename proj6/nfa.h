@@ -9,6 +9,7 @@ public:
     bool Matches (const char * line);
     
 private:
+    char * postfixPattern_;
 };
 
 Nfa::Nfa(const char* pattern)

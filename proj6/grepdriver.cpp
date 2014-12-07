@@ -30,8 +30,6 @@ vector<vector<string> > data;
 
 fsu::Vector<std::string> files;
 int main(int argc, char* argv[])
-{
-
 {//grep [options] [regexp] [filename]
       
     Grep gp;
@@ -58,14 +56,12 @@ int main(int argc, char* argv[])
 	}
 
     
-
 */
   /*  if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
     {
         cout<< argv[2] << " matches";
         return 1;
     } */
-	
 /*
 	if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
 	
@@ -74,7 +70,6 @@ int main(int argc, char* argv[])
 	dump();	//just for testing can safely be removed
 	
 	// needed additions are calls to grep.h to search the files for PATTERN and display the results
-	
 	
 */
     
