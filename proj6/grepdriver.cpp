@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-//#include "grep.h"
+#include "grep.h"
 #include "vector.h"
 
 
@@ -11,30 +11,25 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <limits.h>
-#include <regex>
-
-typedef std::string String;
 
 using namespace std;
 
 bool setInput (int argc, char* argv[]);
 bool getData (size_t k);
 bool addDirectories (char* directory);
-bool wildCard( String input, String file);
-
-
-fsu::Vector<String> list_dir (const char *path);
-bool DirOrFile_(char* path);
-
+bool wildCard(char * input, char* file);
 
 void dump();
 void GrepHelp();
 void CommandFormat();
 
 const char* PATTERN;
-fsu::Vector<String> flags;
-fsu::Vector<String> fileNames;
-fsu::Vector<fsu::Vector<String> > data;
+fsu::Vector<std::string> flags;
+fsu::Vector<std::string> fileNames;
+fsu::Vector<fsu::Vector<std::string> > data;
+
+const char* file;
+bool toFile = false;
 
 int main(int argc, char* argv[])
 {
@@ -45,36 +40,33 @@ int main(int argc, char* argv[])
 	}
 	
 	if (!strcmp("-help", argv[1])){
-		std::cout<< "Help arguments\n";
+		std::cout<< "help arguments";
 		GrepHelp();
 		return 1;
 	}
 		
-	if (argc == 2 && argv[1][0] != '-') {
-        CommandFormat();
-		return 1;
+	if (argc == 2 && argv[1][0] == '-') {
+		CommandFormat();
+        return 1;
 	}
 
+    
 
-    /*if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
+  /*  if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
     {
         cout<< argv[2] << " matches";
         return 1;
     } */
-    
 	
-    if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
+	if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
 	
-	//if (getData(fileNames.Size()-1) == false) return 1;  // This is just for testing purposes
-    
-    if (getData(0) == false) return 1; 				// add lines from fileNames to
-    
+	if (getData(0) == false) return 1; 				// add lines from fileNames to data
 	
-	//just for testing can safely be removed
+	//dump();	//just for testing can safely be removed
 	
 	// needed additions are calls to grep.h to search the files for PATTERN and display the results
 	
-/*    Grep grep;																	// create Grep object
+	Grep grep;																	// create Grep object
 	
     for (size_t i = 0; i < flags.Size(); i++) grep.setFlag(flags[i].c_str());	// set flags
 	
@@ -82,10 +74,16 @@ int main(int argc, char* argv[])
 	
 	if (!grep.processing(fileNames)) return 1;									// set file names
 	
-	for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results */
-	dump();
+	if (!toFile)
+		for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results
+	else {
+		ofstream myfile;
+		myfile.open(file);
+		for (size_t i = 0; i < grep.results().Size(); i++) myfile<<grep.results()[i];
+		myfile.close();
+	}
+	
     return 1;
-    
 }
 
 void dump(){										// this is for testing
@@ -132,8 +130,8 @@ bool addDirectories (char* directory){					// this doesn't work yet and is likel
 
 bool getData(size_t k) {					// works recursively upward from fileNames[k] and puts their data in data[k]
 	
-	fsu::Vector<String> file;				// temporary vector to hold the data from the current file
-	String line;
+	fsu::Vector<std::string> file;				// temporary vector to hold the data from the current file
+	string line;
 	ifstream myfile (fileNames[k]);		
 	
 	while (getline(myfile, line)){
@@ -165,7 +163,20 @@ bool setInput (int argc, char* argv[]){
 	
 	for (int i = k; i < argc; i++){
 		if (argv[i][0] == '-' && lastFlag == false){			// if argv[i] is a flag and there hasn't been a non-flag then add it to flags
-			if (argv[i][1] != '-')								// this is for a single dash flag
+			if (argv [i][1] == 'f') {
+				i++;
+				if (i == (argc - 1)) {								// this is if a flag is the last entry instead of a pattern
+					CommandFormat();
+					return false;
+				}
+				if (argv[i][0] == '-'){
+					cout <<"expected -f FILENAME"<<endl;
+					return false;
+				}
+				toFile = true;
+				file = argv[i];
+			}
+			else if (argv[i][1] != '-')								// this is for a single dash flag
 				flags.PushBack(argv[i] + 1);
 			else
 				flags.PushBack(argv[i] + 2);					// this is for a -- flag
@@ -184,18 +195,14 @@ bool setInput (int argc, char* argv[]){
 			PATTERN = argv[i];
 			havePattern = true;
 			if (i == argc - 1) {
-				cout << "reading from standard in is not implemented" << endl;
-				return false;   								// have flags and pattern need to get data from std in
+				//cout << "reading from standard in is not implemented" << endl;
+				//return false;   								// have flags and pattern need to get data from std in
 			}
 		}
 		else if (lastFlag == true && havePattern == true){
 			stat(argv[i], &st);
 			if (st.st_mode & S_IFDIR){							// if the filename is for a directory search through the directory and add all files in it to fileNames
-                fsu::Vector<String> tmp(list_dir(argv[i]));
-                for(fsu::Vector<String>::Iterator j = tmp.Begin(); j != tmp.End(); ++j)
-                {
-                    fileNames.PushBack(*j);
-                }
+				//addDirectories(argv[i]);						// this probably won't be implemented as it isn't implemented on grep when used on linprog
 			}
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
 				fileNames.PushBack(argv[i]);
@@ -210,10 +217,9 @@ bool setInput (int argc, char* argv[]){
 	return true;
 }
 // fucntion is not working properly.
-bool wildCard( String input, String file)
+bool wildCard(char * input, char* file)
 {
-    //bool match = false;
-    /*
+    bool match = false;
         // If we reach at the end of both strings, we are done
     if (*input== '\0' && *file == '\0'){
             return !match;
@@ -235,17 +241,8 @@ bool wildCard( String input, String file)
         
         return wildCard(input+1, file) || wildCard(input, file+1);
     }
-
-    return match; */
-    regex expresion(input);
-    if (regex_search(file, expresion)) {
-        cout << "Text contains the phrase " << input <<endl;
-        return 1;
-    }
-    else
-    {
-    return 0;
-    }
+    
+    return match;
 
 }
 
@@ -263,56 +260,4 @@ void CommandFormat()
     std::cout << "Error: expected input grep.x [flags] [pattern] [inFile] [outFile]"
               << "\nType -help for help"
               << std::endl;
-}
-// List all the files in the directory\
-
-fsu::Vector<String> list_dir (const char *path)
-{
-    struct dirent *entry;
-    fsu::Vector<String> files;
-    DIR *dir;
-    dir = opendir (path);
-    
-    
-    while ((entry = readdir (dir)) != NULL) {
-        switch (entry->d_type)
-        {
-            case DT_REG:
-            {
-                String location(path);
-                location = location + "/" + entry->d_name;
-                files.PushBack(location);
-            }
-                break;
-            case DT_DIR:
-            {
-                continue;
-            }
-                break;
-            default:
-            {
-                cout<< "Error 1: Empty Folder"<<endl;
-            }
-                break;
-        }
-
-    }
-    return files;
-}
-//
-bool DirOrFile_(char *path)
-{
-    struct stat s;
-    if( stat(path,&s) == 0 )
-    {
-        if( s.st_mode & S_IFDIR )
-        {
-            return 1;
-        }
-        else if( s.st_mode & S_IFREG )
-        {
-            return 0;
-        }
-    }
-    return 0;
 }
