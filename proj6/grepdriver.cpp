@@ -25,13 +25,28 @@ char*			GetPattern		(InputVector args);
 FileVector		GetFiles		(InputVector args);
 Grep::Grep		CreateGrep		(SwitchVector switches, char* pattern, FileVector files);
 void			GrepHelp		();
+void            Version         ();
+void            CommandFormat   ();
 
 int main(int argc, char* argv[]) {
 	InputVector args;
 	for (int i = 1; i < argc; ++i) args.PushBack(argv[i]);
 
+    if (argc == 2 && strcmp("--v",argv[1]) == 0){
+        Version();
+        return 1;
+    }
+    if (argc == 2 && strcmp("--help", argv[1])== 0){
+        GrepHelp();
+        return 1;
+    }
+    if (argc < 2)
+    {
+        CommandFormat();
+        return 0;
+    }
 	if (!ValidCall(args)) {
-		GrepHelp();
+        CommandFormat();
 		return 0;
 	}
 	SwitchVector switches = GetSwitches(args);
@@ -93,6 +108,31 @@ Grep::Grep CreateGrep(SwitchVector switches, char* pattern, FileVector files) {
 void GrepHelp() {
 	std::cout   << "Regexp selection and interpretation:\n"
 				<< "    grep [options] PATTERN [FILE...]\n"
-				<< "    -E, --extended-regexp     PATTERN is an extended regular expression\n"
-				<< "    -F, --fixed-strings       PATTERN is a set of newline-separated strings\n";
+                << std::endl
+				<< "    -n, --line-number\n"
+                << "        Each output line is preceded by its relative line number in the file,\n"
+                << "        starting at line 1.\n"
+				<< "    -l, --files-with-matches\n"
+                << "        Only the names of files containing selected lines are written to standard\n"
+                << "        output.\n"
+                << "    -i, --ignore-case\n"
+                << "        Perform case insensitive matching.  By default, grep is case sensitive.\n"
+                << "    --v, --version\n"
+                << "        Display version information and exit.\n"
+                << std::endl;
+
+}
+void Version() {
+    std::cout   <<"gresp.x (linprog) Version 1\n"
+                <<std::endl
+                <<"Project: grep.x\n"
+                <<"December 7, 2014\n"
+                <<"Group 6:     Matthew Tannehill, Sean Seltzer, Gustavo Maturana, Damien King-Acevedo\n"
+                <<"FSU College of Computer Science\n"
+                <<std::endl;
+}
+void CommandFormat() {
+    std::cout   << "Usage: grep.x [OPTION]... PATTERN [FILE]...\n"
+                << "Try `grep --help' for more information."
+                << std::endl;
 }
