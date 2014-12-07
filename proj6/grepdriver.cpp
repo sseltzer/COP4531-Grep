@@ -192,21 +192,9 @@ bool setInput (int argc, char* argv[]){
 			stat(argv[i], &st);
 			if (st.st_mode & S_IFDIR){							// if the filename is for a directory search through the directory and add all files in it to fileNames
                 fsu::Vector<String> tmp(list_dir(argv[i]));
-                int x = 0;
                 for(fsu::Vector<String>::Iterator j = tmp.Begin(); j != tmp.End(); ++j)
                 {
                     fileNames.PushBack(*j);
-                    
-                    if (wildCard(".txt", *j))
-                    {
-                        cout<<*j<<endl;
-                        
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                    x++;
                 }
 			}
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
