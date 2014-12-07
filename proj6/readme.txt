@@ -36,9 +36,14 @@ Procedual Requirements
 
   	All team members participated on regular schele meetings
 
+ 3) Standard course C++ library was used for the purpose of this project
+
 Software Development
 -----------------------
-
+At the beggining of our development cycle, we were think of using graph  or binary three implementation. 
+If using a binary tree implemenation, the binary tree gets complicated because we had to build the regex in parts and assemble it as we go. Branching operation would have made the
+logic a little bit messy. 
+If using a graph implementation, the graph would convert the regex to a graph that can be followed for character matching. However following a potentially infinite number of branches in one regex would have gotten hard to track.
 
 
 Expect Operations
@@ -47,6 +52,11 @@ Our version of grep is expected to work as per project requirements.
 This implemenation of grep includes Regular Expression notation like concatenation, or ( | ), closure ( * ), parentheses ( ( , ) ), and wildcard ( ( . ) ).
 It aslo includes regular expression "shorthand" characters.
 A genaral form of NFA is alos implemented in this project.
+No erors or warning should be expedted druing the compilation of this application.
+
+The following is expected from the opreration of this program.
+
+
 
 
 Final Testing procedures
