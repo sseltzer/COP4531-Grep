@@ -582,6 +582,62 @@ args.Size(): 2
  
 Suspended
 
++ Test 13: --help
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep.x --help
+Regexp selection and interpretation:
+    grep [options] PATTERN [FILE...]
+
+    -n, --line-number
+        Each output line is preceded by its relative line number in the file,
+        starting at line 1.
+    -l, --files-with-matches
+        Only the names of files containing selected lines are written to standard
+        output.
+    -i, --ignore-case
+        Perform case insensitive matching.  By default, grep is case sensitive.
+    --v, --version
+        Display version information and exit.
+
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
++ Test 14: --v (Version)
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep.x --v
+gresp.x (linprog) Version 1
+
+Project: grep.x
+December 7, 2014
+Group 6:     Matthew Tannehill, Sean Seltzer, Gustavo Maturana, Damien King-Acevedo
+FSU College of Computer Science
+
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep.x
+Usage: grep.x [OPTION]... PATTERN [FILE]...
+Try `grep --help' for more information.
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
++ Test 15: when pattern is not found
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep.x -i AVE COP4531/*.dat
+args.Size(): 4
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep -1 AvE COP4531/*.dat
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
++ Test 16: when file is not found
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep t col
+grep: col: No such file or directory
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
+maturana@linprog2.cs.fsu.edu:~/projtest>grep.x t col
+args.Size(): 2
+grep: col: No such file or directory
+maturana@linprog2.cs.fsu.edu:~/projtest>
+
 
 
 
