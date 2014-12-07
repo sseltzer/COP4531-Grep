@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include "grep.h"
+//#include "grep.h"
 #include "vector.h"
 
 
@@ -11,15 +11,16 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <limits.h>
+#include <regex>
 
-typedef std::string            String;
+typedef std::string String;
 
 using namespace std;
 
 bool setInput (int argc, char* argv[]);
 bool getData (size_t k);
 bool addDirectories (char* directory);
-bool wildCard(char * input, char* file);
+bool wildCard( String input, String file);
 
 
 fsu::Vector<String> list_dir (const char *path);
@@ -50,12 +51,10 @@ int main(int argc, char* argv[])
 	}
 		
 	if (argc == 2 && argv[1][0] != '-') {
-		cout << "reading from standard in is not implimented" << endl;
+        CommandFormat();
 		return 1;
 	}
-    //Dirrectories (argv[2]);
-    //DirOrFile(argv[2]);
-    //DirOrFile_(argv[2]);
+
 
     /*if (wildCard("*.txt", argv[2]) == true)  // for testing purposes of the wildcard
     {
@@ -66,14 +65,16 @@ int main(int argc, char* argv[])
 	
     if (setInput(argc, argv) ==  false) return 1;	// set flags and fileNames
 	
-	if (getData(0) == false) return 1; 				// add lines from fileNames to data
+	//if (getData(fileNames.Size()-1) == false) return 1;  // This is just for testing purposes
+    
+    if (getData(0) == false) return 1; 				// add lines from fileNames to
     
 	
 	//just for testing can safely be removed
 	
 	// needed additions are calls to grep.h to search the files for PATTERN and display the results
 	
-	Grep grep;																	// create Grep object
+/*    Grep grep;																	// create Grep object
 	
     for (size_t i = 0; i < flags.Size(); i++) grep.setFlag(flags[i].c_str());	// set flags
 	
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
 	
 	if (!grep.processing(fileNames)) return 1;									// set file names
 	
-	for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results
+	for (size_t i = 0; i < grep.results().Size(); i++) cout<<grep.results()[i];	// print results */
 	dump();
     return 1;
     
@@ -132,7 +133,7 @@ bool addDirectories (char* directory){					// this doesn't work yet and is likel
 bool getData(size_t k) {					// works recursively upward from fileNames[k] and puts their data in data[k]
 	
 	fsu::Vector<String> file;				// temporary vector to hold the data from the current file
-	string line;
+	String line;
 	ifstream myfile (fileNames[k]);		
 	
 	while (getline(myfile, line)){
@@ -191,11 +192,21 @@ bool setInput (int argc, char* argv[]){
 			stat(argv[i], &st);
 			if (st.st_mode & S_IFDIR){							// if the filename is for a directory search through the directory and add all files in it to fileNames
                 fsu::Vector<String> tmp(list_dir(argv[i]));
+                int x = 0;
                 for(fsu::Vector<String>::Iterator j = tmp.Begin(); j != tmp.End(); ++j)
                 {
-                    fileNames.PushBack(argv[i]+'/'+*j);
-                    // this is just for testing purposes
-                    cout<< (argv[i] + *j) << endl;
+                    fileNames.PushBack(*j);
+                    
+                    if (wildCard(".txt", *j))
+                    {
+                        cout<<*j<<endl;
+                        
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    x++;
                 }
 			}
 			else if (st.st_mode & S_IFREG){						// if the filename belongs to a file added it to fileNames
@@ -211,9 +222,10 @@ bool setInput (int argc, char* argv[]){
 	return true;
 }
 // fucntion is not working properly.
-bool wildCard(char * input, char* file)
+bool wildCard( String input, String file)
 {
-    bool match = false;
+    //bool match = false;
+    /*
         // If we reach at the end of both strings, we are done
     if (*input== '\0' && *file == '\0'){
             return !match;
@@ -235,8 +247,17 @@ bool wildCard(char * input, char* file)
         
         return wildCard(input+1, file) || wildCard(input, file+1);
     }
-    
-    return match;
+
+    return match; */
+    regex expresion(input);
+    if (regex_search(file, expresion)) {
+        cout << "Text contains the phrase " << input <<endl;
+        return 1;
+    }
+    else
+    {
+    return 0;
+    }
 
 }
 
@@ -255,23 +276,39 @@ void CommandFormat()
               << "\nType -help for help"
               << std::endl;
 }
-// List all the files in the directory
+// List all the files in the directory\
+
 fsu::Vector<String> list_dir (const char *path)
 {
-    size_t size = 1000;
     struct dirent *entry;
     fsu::Vector<String> files;
     DIR *dir;
     dir = opendir (path);
     
+    
     while ((entry = readdir (dir)) != NULL) {
-        //char *buffer = path + entry->d_name;
-        if (entry->d_name != ".." && entry->d_name != "." && entry->d_name[0] == ".")
-
-        files.PushBack(entry->d_name);
+        switch (entry->d_type)
+        {
+            case DT_REG:
+            {
+                String location(path);
+                location = location + "/" + entry->d_name;
+                files.PushBack(location);
+            }
+                break;
+            case DT_DIR:
+            {
+                continue;
+            }
+                break;
+            default:
+            {
+                cout<< "Error 1: Empty Folder"<<endl;
+            }
+                break;
+        }
 
     }
-
     return files;
 }
 //
