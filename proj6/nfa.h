@@ -1,17 +1,18 @@
 #include <iostream>
-#include <vector.h>
-#include <graph.h>
-#include <xstring.h>
+#include "vector.h"
+#include "graph.h"
+#include "xstring.h"
 
-typedef uint32_t Vertex;
-typedef fsu::Vector<char> Vector;
-typedef fsu::Vector<size_t> Stack;
-typedef fsu::Vector<Vertex> State;
-typedef fsu::ALDGraph<Vertex> Graph;
+
 
 class NFA
 {
 	public:
+    typedef uint32_t Vertex;
+    typedef fsu::Vector<char> Vector;
+    typedef fsu::Vector<size_t> Stack;
+    typedef fsu::Vector<Vertex> State;
+    typedef fsu::ALDGraph<Vertex> Graph;
 		NFA 						(const char* pattern);
 		void PatternToNFA			(const char* pattern);
 		bool Matches				(const char* line);

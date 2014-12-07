@@ -1,13 +1,10 @@
 
 
-#include "vector.h"#include <string>
 #include <fstream>
 #include "nfa.h"
 
 #define NUM_OF_FLAGS 10;
 
-typedef std::string            String;
-typedef fsu::Vector<String>    Vector;
 
 class Grep
 {
@@ -64,7 +61,6 @@ bool Grep::processing (Vector files)
             return false;
         }
         
-        Nfa nfa(search_);
         if (flagSet_[2] == true)
         {   //add line with file name
             results_.PushBack(files[counter]);
@@ -94,8 +90,6 @@ bool Grep::processing (Vector files)
     }
     return true;
 }
-
-Vector Grep::results()
 {
     return results_;
 }
@@ -119,7 +113,6 @@ bool Grep::search(char* search)
     search_ = search;
     return true;
 }
-
 /*
  -n, --line-number
  Each output line is preceded by its relative line number in the file, starting at line 1.  The line
