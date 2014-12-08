@@ -358,15 +358,15 @@ maturana@linprog2.cs.fsu.edu:~/projtest>grep.x --help
 Regexp selection and interpretation:
     grep [options] PATTERN [FILE...]
 
-    -n, --line-number
+    -n, line-number
         Each output line is preceded by its relative line number in the file,
         starting at line 1.
-    -l, --files-with-matches
+    -l, files-with-matches
         Only the names of files containing selected lines are written to standard
         output.
-    -i, --ignore-case
+    -i, ignore-case
         Perform case insensitive matching.  By default, grep is case sensitive.
-    --v, --version
+    --v, -V version
         Display version information and exit.
 
 maturana@linprog2.cs.fsu.edu:~/projtest>
