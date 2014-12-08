@@ -112,6 +112,7 @@ grep.x --help
 grep.x include ./*.cpp ./*.h
 grep.x -l -n include ./*.cpp ./*.h
 grep.x -i -l -n INClude ./*.cpp ./*.h
+grep.x -i -l -n '(INC.ude)' ./*.cpp ./*.h
 
 
 Expected Operation
