@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 	InputVector args;
 	for (int i = 1; i < argc; ++i) args.PushBack(argv[i]);
 
-    if (argc == 2 && strcmp("--v",argv[1]) == 0){
+    if (argc == 2 && (strcmp("--v",argv[1]) == 0 || strcmp("-V",argv[1]) == 0)) {
         Version();
         return 1;
     }
@@ -61,7 +61,6 @@ int main(int argc, char* argv[]) {
 }
 
 bool ValidCall (InputVector args) {
-	std::cout << "args.Size(): " << args.Size() << "\n";
 	if (args.Size() < 2) return false;
 	size_t nonFlagParams = 0;
 	for (size_t i = 0; i < args.Size(); ++i) if (*args[i] != '-') ++nonFlagParams;
@@ -109,15 +108,15 @@ void GrepHelp() {
 	std::cout   << "Regexp selection and interpretation:\n"
 				<< "    grep [options] PATTERN [FILE...]\n"
                 << std::endl
-				<< "    -n, --line-number\n"
+				<< "    -n,        (line-number)\n"
                 << "        Each output line is preceded by its relative line number in the file,\n"
                 << "        starting at line 1.\n"
-				<< "    -l, --files-with-matches\n"
+				<< "    -l,        (files-with-matches)\n"
                 << "        Only the names of files containing selected lines are written to standard\n"
                 << "        output.\n"
-                << "    -i, --ignore-case\n"
+                << "    -i,        (ignore-case)\n"
                 << "        Perform case insensitive matching.  By default, grep is case sensitive.\n"
-                << "    --v, --version\n"
+                << "    --v, -V    (version)\n"
                 << "        Display version information and exit.\n"
                 << std::endl;
 

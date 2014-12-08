@@ -2,7 +2,9 @@
     grep.h
     12/06/14
     Matthew Tannehill
-
+    Sean Seltzer
+    Gustavo Maturana
+    Damien King-Acevedo
 
     -n, --line-number
     Each output line is preceded by its relative line number in the file, starting at line 1.  The line
@@ -25,6 +27,7 @@
 #ifndef _GREP_H
 #define _GREP_H
 
+#include <sys/stat.h>
 #include <vector.h>
 #include <string>
 #include <cstring>
@@ -68,10 +71,10 @@ namespace Grep
             case 'i':
                 flagSet_[0] = true;
                 return true;
-            case 'l':
+            case 'n':
                 flagSet_[1] = true;
                 return true;
-            case 'n':
+            case 'l':
                 flagSet_[2] = true;
                 return true;
         }
@@ -80,26 +83,30 @@ namespace Grep
 
     bool Grep::Processing (Vector files)
     {
-        
+        if (search_ == NULL)
+        {
+            std::cout << "Search parameter not set\n";
+            return false;
+        }
+
+
         std::ifstream inStream;
         String line,temp;
         size_t lineNumber = 0;
        
-        
+        struct stat st_buf;
+        int status;
         for (size_t counter = 0; counter < files.Size(); ++counter)
         {
+            status = stat(String(files[counter]).c_str(), &st_buf);
+            if (status || S_ISDIR(st_buf.st_mode)) continue;
+
             //open file
             inStream.open(files[counter]);
             if (inStream.fail())
             {
                 std::cout << "grep: " << files[counter] << ": No such file or directory\n";
-                return false;
-            }
-            
-            if (search_ == NULL)
-            {
-                std::cout << "Search parameter not set\n";
-                return false;
+                continue;
             }
             
             NFA nfa(search_);

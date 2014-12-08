@@ -1,7 +1,10 @@
 /*
     nfa.h
     12/06/14
+    Matthew Tannehill
     Sean Seltzer
+    Gustavo Maturana
+    Damien King-Acevedo
 
 */
 #ifndef _NFA_H
