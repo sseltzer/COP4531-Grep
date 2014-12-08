@@ -2,7 +2,9 @@
     grep.h
     12/06/14
     Matthew Tannehill
-
+    Sean Seltzer
+    Gustavo Maturana
+    Damien King-Acevedo
 
     -n, --line-number
     Each output line is preceded by its relative line number in the file, starting at line 1.  The line
@@ -25,6 +27,7 @@
 #ifndef _GREP_H
 #define _GREP_H
 
+#include <sys/stat.h>
 #include <vector.h>
 #include <string>
 #include <cstring>
@@ -80,26 +83,30 @@ namespace Grep
 
     bool Grep::Processing (Vector files)
     {
-        
+        if (search_ == NULL)
+        {
+            std::cout << "Search parameter not set\n";
+            return false;
+        }
+
+
         std::ifstream inStream;
         String line,temp;
         size_t lineNumber = 0;
        
-        
+        struct stat st_buf;
+        int status;
         for (size_t counter = 0; counter < files.Size(); ++counter)
         {
+            status = stat(String(files[counter]).c_str(), &st_buf);
+            if (status || S_ISDIR(st_buf.st_mode)) continue;
+
             //open file
             inStream.open(files[counter]);
             if (inStream.fail())
             {
                 std::cout << "grep: " << files[counter] << ": No such file or directory\n";
-                return false;
-            }
-            
-            if (search_ == NULL)
-            {
-                std::cout << "Search parameter not set\n";
-                return false;
+                continue;
             }
             
             NFA nfa(search_);
@@ -145,6 +152,14 @@ namespace Grep
         if (sizeof(*search) == 0) { std::cout << "Search is zero length\n "; return false;}
         if (search == NULL)       { std::cout << "Search pointer is NULL\n"; return false;}
         if (*search == '\0')      { std::cout << "'\\0' string\n          "; return false;}
+
+        size_t openParen = 0;
+        size_t closeParen = 0;
+        for(char* c = search; *c; ++c) {
+            if (*c == '(') ++openParen;
+            if (*c == ')') ++closeParen;
+        }
+        if (openParen != closeParen) { std::cout << "Invalid regular expression.\n "; return false;}
         
         if (flagSet_[0] == true)
         {
