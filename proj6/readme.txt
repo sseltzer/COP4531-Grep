@@ -111,7 +111,7 @@ grep.x --v
 grep.x --help
 grep.x include ./*.cpp ./*.h
 grep.x -l -n include ./*.cpp ./*.h
-grep.x -l -n INClude ./*.cpp ./*.h
+grep.x -i -l -n INClude ./*.cpp ./*.h
 
 
 Expected Operation
