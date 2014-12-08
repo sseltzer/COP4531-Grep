@@ -6,7 +6,7 @@ Team Members:
 	Damien King-Acevedo
 	Gustavo Maturana
 
-Project Link to github: 
+Project Link to Github repository: https://github.com/sseltzer/COP4531-Grep.git
 
 Objectives of this Project
 ----------------------------
@@ -17,7 +17,7 @@ Objectives of this Project
 + Describe how to build an NFA that models a given RegEx.
 + Describe how to use an NFA to find a RegEx pattern-match in a string.
 
-Procedual Requirements
+Procedural Requirements
 ------------------------
 
 1) The official development | testing | assessment environment is g++47 -std=c++11 -Wall 
@@ -30,33 +30,50 @@ Procedual Requirements
   + Sean Seltzer
 	Responsible for the nfa.h, makefile, integration
   + Gustavo Maturan
-  	Reponsible for trouble shooting/debugging, testing, make changes to code as necesary, wrting test reports
+  	Responsible for trouble shooting/debugging, testing, make changes to code as necessary, writing test reports
   + Damien King-Acevedo
   	Responsible for grepdriver.cpp, trouble shooting/debugging
 
-  	All team members participated on regular schele meetings
+  	All team members participated on regular schedule meetings
 
  3) Standard course C++ library was used for the purpose of this project
 
 Software Development
 -----------------------
-At the beggining of our development cycle, we were think of using graph  or binary three implementation. 
-If using a binary tree implemenation, the binary tree gets complicated because we had to build the regex in parts and assemble it as we go. Branching operation would have made the
-logic a little bit messy. 
-If using a graph implementation, the graph would convert the regex to a graph that can be followed for character matching. However following a potentially infinite number of branches in one regex would have gotten hard to track.
+At the beginning of our development cycle, we were think of using graph or binary three implementation. 
+If we used a binary tree implementation, the binary tree would tended to get complicated because we had to build the regex in parts and assemble it as we went. Branching operation would have made the logic a little bit messy. 
+If we used a graph implementation, the graph would convert the regex to a graph that can be followed for character matching. However we could be following a potentially infinite number of branches in one. This way regex would have become hard to track.
+
+We decided to implement a grah instead of a binary tree. The concept of crwaling of the graph
+for every possible path throught the regex over the whole was very appealing to group.
+
+
 
 
 Expect Operations
 -----------------------
 Our version of grep is expected to work as per project requirements.
-This implemenation of grep includes Regular Expression notation like concatenation, or ( | ), closure ( * ), parentheses ( ( , ) ), and wildcard ( ( . ) ).
-It aslo includes regular expression "shorthand" characters.
-A genaral form of NFA is alos implemented in this project.
-No erors or warning should be expedted druing the compilation of this application.
+This implementation of grep includes Regular Expression notation like concatenation, or ( | ), closure ( * ), parentheses ( ( , ) ), and wildcard ( ( . ) ).
+It also includes regular expression "shorthand" characters.
+A general form of NFA is also implemented in this project.
+No errors or warning should be expected during the compilation of this application.
 
-The following is expected from the opreration of this program.
+The following is expected from the operation of this program.
 
++ grep.x -n [file]
+	Each output line is preceded by its relative line number in the file, starting at line 1.The line number counter is reset for each file processed.  This option is ignored if -c, -L, -l, or -q is specified.
 
++ grep.x -l [file]
+    Only the names of files containing selected lines are written to standard output.  grep will only search a file until a match has been found, making searches potentially less expensive.  Pathnames are listed once per file searched.  If the standard input is searched, the string ``(standard input)'' is written.
+
++ grep.x -i [file]
+    Perform case insensitive matching.  By default, grep is case sensitive.
+
++ grep.x --v 
+    Display version information and exit.
+
++ grep.x --help
+	will display the list of commands supported by the application
 
 
 Final Testing procedures
@@ -216,20 +233,20 @@ maturana@linprog2.cs.fsu.edu:~/projtest>
 
 Both applications have similar output
 
-+ Test 8: -i whilcard
++ Test 8: -i wildcard
 
 - Our group 6 grep.x application output
 maturana@linprog2.cs.fsu.edu:~/projtest>grep.x -i AVE COP4531/*.txt
 args.Size(): 4
 Line 5 We may now have our first look at him. An Instagram photo that surfaced yesterday 
-Line 6: Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+Line 6: Genesis,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
 
 - Original grep application
 maturana@linprog2.cs.fsu.edu:~/projtest>grep -i AVE COP4531/*.txt
 COP4531/Avengers.txt:Line 2 summer’s Avengers: Age of Ultron (below), there was one major character who even
 COP4531/Avengers.txt:Line 5 We may now have our first look at him. An Instagram photo that surfaced yesterday 
 COP4531/Avengers.txt:Line 7 rough art from Joss Whedon’s Avengers sequel, featuring a half-dozen our heroes,
-COP4531/myTest.txt:Line 6: Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+COP4531/myTest.txt:Line 6: Genesis,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
 maturana@linprog2.cs.fsu.edu:~/projtest>
 
 grep finds two additional lines that show "AVE" while grep.x shows only 2 line of text that show "AVE"
@@ -242,13 +259,13 @@ args.Size(): 4
 COP4531/Avengers.txt
     We may now have our first look at him. An Instagram photo that surfaced yesterday 
 COP4531/myTest.txt
-    Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+    Genesis,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
     There is an ave here
 
-- Original grep appliation output
+- Original grep application output
 maturana@linprog2.cs.fsu.edu:~/projtest>grep -n ave COP4531/*.txt
 COP4531/Avengers.txt:7:We may now have our first look at him. An Instagram photo that surfaced yesterday 
-COP4531/myTest.txt:7:Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+COP4531/myTest.txt:7:Genesis,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
 COP4531/myTest.txt:14:There is an ave here
 maturana@linprog2.cs.fsu.edu:~/projtest>
 
@@ -284,7 +301,7 @@ grep displays the files in which “ave” appears while grep.x goes into an inf
 maturana@linprog2.cs.fsu.edu:~/projtest>grep.x -l ave COP4531/*.txt
 args.Size(): 4
 Line [7] : We may now have our first look at him. An Instagram photo that surfaced yesterday 
-Line [7] : Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+Line [7] : Genesis,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
 Line [14] : There is an ave here
 maturana@linprog2.cs.fsu.edu:~/projtest>
 
@@ -322,7 +339,7 @@ COP4531/myTest.txt:Date: December 12, 2014
 maturana@linprog2.cs.fsu.edu:~/projtest>grep.x -v ave COP4531/*.txt
 args.Size(): 4
 We may now have our first look at him. An Instagram photo that surfaced yesterday 
-Genisys,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
+Genesis,” Sarah Connor (Emilia Clarke) explains that somehow the Trousers of Time™ have 
 There is an ave here
 maturana@linprog2.cs.fsu.edu:~/projtest>
 
