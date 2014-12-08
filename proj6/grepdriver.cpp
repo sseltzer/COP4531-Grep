@@ -23,7 +23,7 @@ bool			ValidCall		(InputVector args);
 SwitchVector	GetSwitches		(InputVector args);
 char*			GetPattern		(InputVector args);
 FileVector		GetFiles		(InputVector args);
-Grep::Grep		CreateGrep		(SwitchVector switches, char* pattern, FileVector files);
+Grep::Grep		CreateGrep		(SwitchVector switches);
 void			GrepHelp		();
 void            Version         ();
 void            CommandFormat   ();
@@ -52,7 +52,9 @@ int main(int argc, char* argv[]) {
 	SwitchVector switches = GetSwitches(args);
 	char* pattern   = GetPattern(args);
 	FileVector files = GetFiles(args);
-	Grep::Grep grep = CreateGrep(switches, pattern, files);
+	Grep::Grep grep = CreateGrep(switches);
+	if (!grep.Search(pattern)) return 0;
+	grep.Processing(files);
 
 	fsu::Vector<String> results = grep.Results();
 	for (size_t i = 0; i < results.Size(); ++i) {
@@ -96,11 +98,9 @@ FileVector GetFiles(InputVector args) {
 	return files;
 }
 
-Grep::Grep CreateGrep(SwitchVector switches, char* pattern, FileVector files) {
+Grep::Grep CreateGrep(SwitchVector switches) {
 	Grep::Grep grep;
 	for (size_t i = 0; i < switches.Size(); ++i) grep.SetFlag(switches[i]);
-	grep.Search(pattern);
-	grep.Processing(files);
 	return grep;
 }
 

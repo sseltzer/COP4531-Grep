@@ -152,6 +152,14 @@ namespace Grep
         if (sizeof(*search) == 0) { std::cout << "Search is zero length\n "; return false;}
         if (search == NULL)       { std::cout << "Search pointer is NULL\n"; return false;}
         if (*search == '\0')      { std::cout << "'\\0' string\n          "; return false;}
+
+        size_t openParen = 0;
+        size_t closeParen = 0;
+        for(char* c = search; *c; ++c) {
+            if (*c == '(') ++openParen;
+            if (*c == ')') ++closeParen;
+        }
+        if (openParen != closeParen) { std::cout << "Invalid regular expression.\n "; return false;}
         
         if (flagSet_[0] == true)
         {
