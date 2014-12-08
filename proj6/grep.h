@@ -71,10 +71,10 @@ namespace Grep
             case 'i':
                 flagSet_[0] = true;
                 return true;
-            case 'n':
+            case 'l':
                 flagSet_[1] = true;
                 return true;
-            case 'l':
+            case 'n':
                 flagSet_[2] = true;
                 return true;
         }

@@ -26,11 +26,14 @@ Procedural Requirements
 2) Group Duties:
 
   + Matthew Tannehill (Team Leader):
-	Responsible for the grep.h, integration
+	  Responsible for the grep.h, integration
+
   + Sean Seltzer
-	Responsible for the nfa.h, makefile, integration
+	  Responsible for the nfa.h, makefile, integration
+
   + Gustavo Maturan
   	Responsible for trouble shooting/debugging, testing, make changes to code as necessary, writing test reports
+
   + Damien King-Acevedo
   	Responsible for grepdriver.cpp, trouble shooting/debugging
 
@@ -40,17 +43,78 @@ Procedural Requirements
 
 Software Development
 -----------------------
-At the beginning of our development cycle, we were think of using graph or binary three implementation. 
-If we used a binary tree implementation, the binary tree would tended to get complicated because we had to build the regex in parts and assemble it as we went. Branching operation would have made the logic a little bit messy. 
-If we used a graph implementation, the graph would convert the regex to a graph that can be followed for character matching. However we could be following a potentially infinite number of branches in one. This way regex would have become hard to track.
+We selected the Grep tool because we felt it would be an interesting project to tackle. It's essentially part of every linux
+and unix system and is one of the most well known tools in that arena. That being said, it's a fascinating and complex problem
+to solve. NFAs are an interesting algorithm because there is so much complexity in parallel operations all validating a string
+simultaneously. The problem is this: how do we implement pattern matching to search files where we do not specifically need to
+state exactly what we're looking for, but we can give enough information to a program that can interpret what we want and search
+for it. Enter: regex. We can use shorthand operations to specify what kind of patterns we'd like to identify. Given that, we can
+search for complex patterns that involve multiple routes. Take for example ((A*C|AB)D). Using this pattern we can search based
+on special characters, namely ()|* to find what we want. * is a closure that searches for 0 or more of a character. () for order
+of operations, and | for or branching. The given pattern searches for ACD AACD AAACD ABD, etc for infinite branches. The problem
+now that we've developed complex expressions for our branches for pattern matching. To be efficient we only want to search the
+characters in a file once. Thus we must check all possible states at once, for every character. Every character must check if it
+is the start of a sequence, or if the previous character(s) passed, if this character is in the middle of a sequence. Once a
+branch has failed, it must stop checking. If the character sequence matches any branch of the pattern to the end, we have identified
+a match.
 
-We decided to implement a grah instead of a binary tree. The concept of crwaling of the graph
-for every possible path throught the regex over the whole was very appealing to group.
+That being said, there are multiple implementation options. We explored two of which, a binary tree and a graph. While the binary
+tree implementation was our first attempt, it became complex. To compile the pattern and determine all possible sequences, it must
+be structured as roots and branching nodes, but the branch operators may come further down in the sequence. Using the previous
+example, two branches ACD and ABD must be under a root node. So you must convert the pattern to postfix and build each branch
+separately and attach them at the end. This is viable but complex for the developer to reason about. The graph implementation while
+it must perform the same logic, is much easier to construct. For every character we can see what control characters we have and branch
+accordingly or and open parens with nested ors will require branching. Closures also require branching. Thus, we can add each character
+to a graph and add our edges between branching characters.
+
+The traversal is a bit more complex. Once we compile our pattern into the NFA and build our graph, we must start analyzing the lines
+to detect matches. While it may be intuitive once explained, we went through numerous iterations during the discovery process on just
+how the detection was supposed to work while maintaining scalability. The first several iterations surrounded the concept of a stack
+and pushing our history of each verification onto the stack and unwinding once we fail a branch in order to check the next one. The
+unintuitive problem with this is that while you're checking each character, you could potentially be skipping the start of a branch
+while in the middle of a failed branch. Thus, that algorithm would never work. Another iteration involved discovering all possible
+branches and tracing through each one and recording them at the start, so they could be checked in parallel. This also was deemed
+unreasonable as it is difficult to traverse the graph and record all possible states when given a complex pattern. The final solution
+involved a fast forwarding function. Any time we have a valid match we fast forward that branch through to the next viable character
+to match. Since during a previous implementation we found that if we did not, then you would compare control characters and valid
+character simultaneously, which would skip valid detections. In order to do this, we maintain a list of all current branches being
+checked and for every character, add a new check. When a character is matched, or a control character is detected, we consider it
+valid and fast forward to the next viable characters for the next character in the line. All appropriate branches are taken along
+the way and pushed onto the stack. So if a control character branches, we will skip it, add both branches, and skip those control
+characters until we find valid characters. This was most effectively done recursively. Once we get through to the end of the line
+all invalid branches will die off and new searches will be started on each character. The dying off process just involves two lists,
+the current branches being checked and new branches. Old branches are dumped, and any new branches or advancing branches are added.
+That way we don't inflate memory needlessly, and the algorithm stays quite fast.
+
+That being said, this is how the core of grep works. We implemented several control characters, again: ()|*.
+We left plenty of room for scalability for the application. Grepdriver and Grep are maintained in data structures that easily allow
+for additional flags to be added with very little modification. NFA itself uses a switch statement to build the graph based on
+control characters that may be easily added to. The valid branch checking is done in one simple boolean return function and the
+recursive branch fast forwarding is done in a scalable way as well. Thus, we may add additional controls, and flag functionality
+with little effort. As we move on, we will see how our grep class is to be used.
 
 
+A note on usage:
+Our grep.x matches grep -E
+The extended characters must be enabled on the original grep for comparisions since we use the extended character set.
+
+Our grep is also able to take multiple flags and multiple files/directories. We fully support file matching wildcards, so
+a path of ./* may be given to check all files in the current directory or nfa.h for example would check only nfa.h for matches.
+You can also pass in multiple file patterns, such as ./*.cpp ./*.h to match all cpp and header files in the current directory.
+
+The pattern must also be wrapped in single quotes to be parsed by the command line properly as does the normal grep. So while
+grep.x include ./*.cpp ./*.h would match all include statements in the cpp and header files, if you pass in '((A*C|AB)D)' it must
+be in single quotes - this is a unix requirement.
+
+Example grep statements:
+grep.x --v
+grep.x --help
+grep.x include ./*.cpp ./*.h
+grep.x -l -n include ./*.cpp ./*.h
+grep.x -l -n INClude ./*.cpp ./*.h
 
 
-Expect Operations
+Expected Operation
 -----------------------
 Our version of grep is expected to work as per project requirements.
 This implementation of grep includes Regular Expression notation like concatenation, or ( | ), closure ( * ), parentheses ( ( , ) ), and wildcard ( ( . ) ).
